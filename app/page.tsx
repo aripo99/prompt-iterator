@@ -27,7 +27,7 @@ export default function Home() {
   }
 
   return (
-    <div className="flex flex-col p-8 pb-20 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+    <div className="flex flex-col min-h-screen p-8 pb-20 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <div className="flex flex-col flex-grow gap-8 items-center sm:items-start w-full max-w-2xl mx-auto">
         <p className="text-2xl font-bold text-center sm:text-left">AI Prompt Generator</p>
         {loading && <p>Loading...</p>}
@@ -37,12 +37,12 @@ export default function Home() {
           </div>
         )}
       </div>
-      <div className="flex flex-row w-full max-w-lg mx-auto pt-10">
+      <div className="mt-auto flex flex-row w-full max-w-lg mx-auto pt-10">
         <Input
           className="flex-grow"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Describe the prompt..."
+          placeholder={messages.length === 0 ? "Describe the prompt..." : "Describe how to update the prompt..."}
         />
         <Button onClick={handleGeneratePrompt}>
           <Send className="h-4 w-4" />

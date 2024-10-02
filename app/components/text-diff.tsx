@@ -3,14 +3,18 @@
 import { useEffect, useState } from 'react'
 import { diff_match_patch } from 'diff-match-patch'
 
-export function TextDiff({ oldText, newText }: { oldText: string; newText: string }) {
+export function TextDiff({ oldText, newText }: { oldText?: string; newText: string }) {
   const [diff, setDiff] = useState<Array<[number, string]>>([])
 
   useEffect(() => {
-    const dmp = new diff_match_patch()
-    const differences = dmp.diff_main(oldText, newText)
-    dmp.diff_cleanupSemantic(differences)
-    setDiff(differences)
+    if (oldText) {
+      const dmp = new diff_match_patch()
+      const differences = dmp.diff_main(oldText, newText)
+      dmp.diff_cleanupSemantic(differences)
+      setDiff(differences)
+    } else {
+      setDiff([[0, newText]])
+    }
   }, [oldText, newText])
 
   const renderDiff = (text: string, type: 'old' | 'new') => {
@@ -38,15 +42,19 @@ export function TextDiff({ oldText, newText }: { oldText: string; newText: strin
   }
 
   return (
-    <div className="flex flex-col lg:flex-row gap-8 p-6 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl shadow-lg">
-      <div className="flex-1">
-        <h2 className="text-xl font-semibold mb-4 text-gray-700 border-b pb-2">Previous Prompt</h2>
-        <pre className="whitespace-pre-wrap bg-white p-4 rounded-lg border border-gray-200 shadow-sm text-sm leading-relaxed">
-          {renderDiff(oldText, 'old')}
-        </pre>
-      </div>
-      <div className="flex-1">
-        <h2 className="text-xl font-semibold mb-4 text-gray-700 border-b pb-2">Updated Prompt</h2>
+    <div className={`flex flex-col ${oldText ? 'lg:flex-row' : ''} gap-8 p-6 bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl shadow-lg`}>
+      {oldText && (
+        <div className="flex-1">
+          <h2 className="text-xl font-semibold mb-4 text-gray-700 border-b pb-2">Previous Prompt</h2>
+          <pre className="whitespace-pre-wrap bg-white p-4 rounded-lg border border-gray-200 shadow-sm text-sm leading-relaxed">
+            {renderDiff(oldText, 'old')}
+          </pre>
+        </div>
+      )}
+      <div className={`flex-1 ${!oldText ? 'max-w-3xl mx-auto w-full' : ''}`}>
+        <h2 className="text-xl font-semibold mb-4 text-gray-700 border-b pb-2">
+          {oldText ? 'Updated Prompt' : 'Current Prompt'}
+        </h2>
         <pre className="whitespace-pre-wrap bg-white p-4 rounded-lg border border-gray-200 shadow-sm text-sm leading-relaxed">
           {renderDiff(newText, 'new')}
         </pre>
