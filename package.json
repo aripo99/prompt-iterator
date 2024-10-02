@@ -16,6 +16,7 @@
     "diff-match-patch": "^1.0.5",
     "lucide-react": "^0.447.0",
     "next": "14.2.14",
+    "openai": "^4.67.0",
     "react": "^18",
     "react-diff-view": "^3.2.1",
     "react-dom": "^18",
