@@ -25,25 +25,26 @@ export default function Home() {
   }
 
   return (
-    <div className="grid grid-rows items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
+    <div className="flex flex-col min-h-screen p-8 pb-20 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+      <div className="flex flex-col flex-grow gap-8 items-center sm:items-start w-full max-w-2xl mx-auto">
         {loading && <p>Loading...</p>}
-        {generatedPrompt && !loading &&
-          <div className="flex flex-col gap-4 items-center">
+        {generatedPrompt && !loading && (
+          <div className="flex flex-col gap-4 items-center w-full">
             <TextDiff oldText={previousPrompt} newText={generatedPrompt} />
           </div>
-        }
-        <div className="flex flex-row">
-          <Input 
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Type a message..."
-          />
-          <Button onClick={handleGeneratePrompt}>
-            <Send className="h-4 w-4"/>
-          </Button>
-        </div>
-      </main>
+        )}
+      </div>
+      <div className="flex flex-row w-full max-w-lg mx-auto pt-4">
+        <Input
+          className="flex-grow"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          placeholder="Type a message..."
+        />
+        <Button onClick={handleGeneratePrompt}>
+          <Send className="h-4 w-4" />
+        </Button>
+      </div>
     </div>
   );
 }
