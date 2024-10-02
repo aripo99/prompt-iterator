@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Send } from "lucide-react";
+import { Send, Plus } from "lucide-react";
 import { useState } from "react";
 
 import React from 'react';
@@ -26,6 +26,12 @@ export default function Home() {
     setLoading(false);
   }
 
+  function handleClear() {
+    setMessages([]);
+    setGeneratedPrompt("");
+    setPreviousPrompt("");
+  }
+
   return (
     <div className="flex flex-col min-h-screen p-8 pb-20 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <div className="flex flex-col flex-grow gap-8 items-center sm:items-start w-full max-w-2xl mx-auto">
@@ -38,6 +44,9 @@ export default function Home() {
         )}
       </div>
       <div className="mt-auto flex flex-row w-full max-w-lg mx-auto pt-10">
+        <Button onClick={handleClear} className="mx-2" variant="outline">
+          <Plus className="h-4 w-4" />
+        </Button>
         <Input
           className="flex-grow"
           value={input}
