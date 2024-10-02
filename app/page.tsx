@@ -14,19 +14,22 @@ export default function Home() {
   const [generatedPrompt, setGeneratedPrompt] = useState<string>("");
   const [input, setInput] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+  const [messages, setMessages] = useState<Array<{ role: string; content: string }>>([]);
 
   async function handleGeneratePrompt() {
     setLoading(true);
     setPreviousPrompt(generatedPrompt);
-    const prompt = await generatePrompt(input);
+    const prompt = await generatePrompt([...messages, { role: "user", content: input }]);
+    setMessages([...messages, { role: "user", content: input }, { role: "system", content: prompt }]);
     setGeneratedPrompt(prompt);
     setInput("");
     setLoading(false);
   }
 
   return (
-    <div className="flex flex-col min-h-screen p-8 pb-20 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+    <div className="flex flex-col p-8 pb-20 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <div className="flex flex-col flex-grow gap-8 items-center sm:items-start w-full max-w-2xl mx-auto">
+        <p className="text-2xl font-bold text-center sm:text-left">AI Prompt Generator</p>
         {loading && <p>Loading...</p>}
         {generatedPrompt && !loading && (
           <div className="flex flex-col gap-4 items-center w-full">
@@ -34,12 +37,12 @@ export default function Home() {
           </div>
         )}
       </div>
-      <div className="flex flex-row w-full max-w-lg mx-auto pt-4">
+      <div className="flex flex-row w-full max-w-lg mx-auto pt-10">
         <Input
           className="flex-grow"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Type a message..."
+          placeholder="Describe the prompt..."
         />
         <Button onClick={handleGeneratePrompt}>
           <Send className="h-4 w-4" />
