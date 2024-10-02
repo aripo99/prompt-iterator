@@ -7,12 +7,16 @@ import { useState } from "react";
 
 import React from 'react';
 import { TextDiff } from './components/text-diff';
+import { generatePrompt } from '@/lib/actions/generate-prompt';
 
 export default function Home() {
-  const [generatedPrompt, setGeneratedPrompt] = useState<string | null>(null);
+  const [previousPrompt, setPreviousPrompt] = useState<string>("");
+  const [generatedPrompt, setGeneratedPrompt] = useState<string>("");
 
-  function handleGeneratePrompt() {
-    setGeneratedPrompt('This is a generated prompt');
+  async function handleGeneratePrompt() {
+    setPreviousPrompt(generatedPrompt);
+    const prompt = await generatePrompt();
+    setGeneratedPrompt(prompt);
   }
 
   return (
@@ -20,7 +24,7 @@ export default function Home() {
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
         {generatedPrompt && 
           <div className="flex flex-col gap-4 items-center">
-            <TextDiff oldText="Something Completely Different" newText={generatedPrompt} />
+            <TextDiff oldText={previousPrompt} newText={generatedPrompt} />
           </div>
         }
         <div className="flex flex-row">
